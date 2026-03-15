@@ -499,20 +499,33 @@ and store all your images there. Let's say I stored the `cat.png` image. We can 
 
 
 ```yaml
-  - trigger: :one
-    replace: nested
+  - trigger: :store
+    replace: "ABC Store"
 
-  - trigger: :nested
-    replace: This is a {{output}} match
+  - trigger: :receipt_header
+    replace: "Receipt — {{store_name}}"
     vars:
-      - name: output
+      - name: store_name
         type: match
         params:
-          trigger: :one
+          trigger: :store
+
+  - trigger: :invoice_header
+    replace: "Invoice from {{store_name}} — thank you for your purchase."
+    vars:
+      - name: store_name
+        type: match
+        params:
+          trigger: :store
 ```
 
 
-At this point, if you type `:nested` you'll see `This is a nested match` appear.
+
+At this point, if you type `:receipt_header` you'll see `Receipt — ABC Store` appear.
+
+If you type `:invoice_header` you'll see `Invoice from ABC Store — thank you for your purchase.` appear.
+
+If the store name changes, you update `:store` in a single place and both parent matches reflect the change automatically.
 
 ## Keyboard Triggers
 
